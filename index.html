@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>哈哈</title>
+
+    <link rel="stylesheet" href="/index.css">
+    <style></style>
+
+    <link rel="import" href="/header.html">
+</head>
+<body>
+    <div class="app" id="app">
+        <header class="ui-page-header"></header>
+        大家好，我是 { name }，年龄 { age }
+        <button ui-click="updateName">修改name数据的值</button>
+        这是首页
+        <div class="custom">这是自定义属性</div>
+        <div class="custom2">这也是自定义属性</div>
+    </div>
+    <button id="about">查看关于</button>
+
+    <a href="./about2.html">关于</a>
+    <!-- <button>查看关于</button> -->
+
+    <button id="back">返回</button>
+    <button id="request">请求</button>
+    <button id="toast">toast</button>
+    <script type="module" src="./test.js"></script>
+    <!-- <script type="module">
+        import 'https://unpkg.com/xy-ui';
+    
+        import 'https://unpkg.com/xy-ui@1.4.1';//指定版本号
+    </script> -->
+    
+    <!--or-->
+    
+    <!-- https://github.com/WebComponents/webcomponentsjs，可以 -->
+    <!-- https://www.jianshu.com/p/dfdb803ac04a -->
+
+
+    <!-- <script type="module" src="https://unpkg.com/xy-ui"></script> -->
+<script src="/yunser/app.js"></script>
+<script src="/yunser/router.js"></script>
+<script>
+    const _app = window.yunser.app
+    console.log('app', _app)
+    _app.init()
+
+    // _app.
+    const _ui = _app.ui
+
+    // _ui.alert('1')
+
+
+    /* 最简单粗暴的数据绑定 */
+    function Sue(options) {
+        let $app = document.getElementById(options.el)
+        let innerHTML = document.getElementById(options.el).innerHTML
+        console.log('innerHTML', innerHTML)
+
+
+
+        initData(this, options)
+
+        $app.innerHTML = innerHTML.replace(/{\s*?(\w+?)\s*?}/g, (a, key) => {
+            console.log('a,b', a, key)
+
+            return this[key]
+        })
+
+        if (typeof options.ready === 'function') {
+            options.ready.call(this)
+        }
+    }
+    
+    function initData (vm,options) {
+        var data = options.data;
+        data = typeof data === 'function' ? data() : data || {};
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                vm[key] = data[key]
+            }
+        }
+    }
+
+        new Sue({
+            el: 'app',
+            data: {
+                name:'ssx',
+                age:18
+            },
+            state: {
+                name: 'cjh',
+                age: 18
+            },
+            // data() {
+            //     return 
+            // },
+            ready() {
+                console.log("name",this.name);
+                console.log("age",this.age);
+            }
+        })
+    </script>
+    <script>
+        // const _app = window.yunserApp
+
+        function asd() {
+            let search = '?from=home&data=123'
+            let result = {}
+            if (search) {
+                let kv = search.substring(1)
+                console.log('kv', kv)
+                let arr = kv.split('&')
+                console.log('arr', arr)
+                for (let item of arr) {
+                    let _arr = item.split('=')
+                    result[_arr[0]] = _arr[1]
+                }
+            }
+            return result
+        }
+        console.log(asd())
+
+        // 路由
+        // https://www.jianshu.com/p/6f94c102bdbd
+
+        function updateApp() {
+            console.log('updateApp', window.location)
+            const { pathname } = window.location
+            if (location.search) {
+                // search: "?from=home&data=123"
+            }
+            if (pathname === '/') {
+                document.getElementById('app').innerHTML = 'home'
+            }
+            if (pathname === '/about') {
+                document.getElementById('app').innerHTML = 'about'
+            }
+        }
+
+        _app.router.listen(() => {
+            updateApp()
+        })
+        document.getElementById('about').addEventListener('click', () => {
+    //         if (!!(window.history && history.pushState)) {
+    //     // 支持History API
+    //     window.history.pushState({name: 'history'}, link, link);
+    //   } else {
+    //     // 不支持,可使用一些Polyfill库来实现
+    //   }
+            _app.router.push('/about?from=home&data=123')
+            
+
+            updateApp()
+            // window.history.back()
+        })
+        document.getElementById('request').addEventListener('click', () => {
+            fetch('https://nodeapi.yunser.com/')
+                .then(res => res.json())
+                .then(json => console.log('json', json))
+            // window.history.back()
+        })
+
+        
+        
+        
+    </script>
+
+    
+
+    
+
+</body>
+</html>

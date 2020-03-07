@@ -1,0 +1,33 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    background: f9f9f9;
+}
+.app {
+    border: 1px solid #000;
+}
+.ui-page-header {
+    height: 56px;
+    background: #f00;
+}
+:root {
+    --main-bg-color: brown;
+    /* background:#ff0000; */
+}
+body {
+    
+    /* background: #09c; */
+}
+element {
+    
+}
+.custom {
+    
+    background-color: var(--main-bg-color);
+}
+.custom2 {
+    background-color: var(--main-bg-color);
+}
